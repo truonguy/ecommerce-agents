@@ -57,12 +57,13 @@ Thứ tự: **Foundation (T1–T3) → Login slices (T4–T6) → Account flows 
 **Scope:** S
 > ⚠️ *Ask first* — thêm dependency `spatie/laravel-permission` (theo boundary spec).
 
-#### Task 2: Migrations + Models
+#### Task 2: Migrations + Models ✅ DONE
 **Description:** Tạo migration `customers`, `employees`, `audit_logs` + chạy migration spatie; tạo model `Customer`, `Employee` (HasApiTokens; Employee + HasRoles), enum status.
 **Acceptance criteria:**
-- [ ] Bảng customers/employees có cột theo spec §5 (email unique, status enum).
-- [ ] `Employee` dùng trait `HasRoles`, `HasApiTokens`; `Customer` dùng `HasApiTokens`.
-- [ ] `audit_logs` đúng cột (guard, email, ip, user_agent, action, result).
+- [x] Bảng customers/employees có cột theo spec §5 (email unique, status enum).
+- [x] `Employee` dùng trait `HasRoles`, `HasApiTokens`; `Customer` dùng `HasApiTokens`.
+- [x] `audit_logs` đúng cột (guard, email, ip, user_agent, action, result).
+> Env note: PHP CLI thiếu `pdo_sqlite` → test chạy trên MySQL DB riêng `laravel_test` (phpunit.xml). Thêm `App\Enums\UserStatus` + factories Customer/Employee.
 **Verification:** `php artisan migrate:fresh` thành công; `php artisan test --filter=Migration` (smoke) pass.
 **Dependencies:** Task 1
 **Files:** `database/migrations/*`, `app/Models/Customer.php`, `app/Models/Employee.php`
