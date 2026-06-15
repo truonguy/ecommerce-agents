@@ -69,18 +69,19 @@ Thứ tự: **Foundation (T1–T3) → Login slices (T4–T6) → Account flows 
 **Files:** `database/migrations/*`, `app/Models/Customer.php`, `app/Models/Employee.php`
 **Scope:** M
 
-#### Task 3: Seed roles/permissions + EnsureGuard middleware
+#### Task 3: Seed roles/permissions + EnsureGuard middleware ✅ DONE
 **Description:** Seeder tạo permissions (manage_product/order/customer/employee, system_config) + role employee/admin với mapping spec §5; middleware `EnsureGuard` chặn token sai phân hệ.
 **Acceptance criteria:**
-- [ ] Seeder gán đúng permission cho `employee` và `admin`.
-- [ ] `EnsureGuard:customer` từ chối token employee và ngược lại (→ 401/403).
+- [x] Seeder gán đúng permission cho `employee` (3) và `admin` (5).
+- [x] `EnsureGuard:customer` từ chối token employee và ngược lại (→ 401).
+> Cross-access đã có sẵn ở Sanctum (`hasValidProvider`); EnsureGuard thêm `Auth::shouldUse`. Đã bật API routing (`bootstrap/app.php`) + alias `ensure_guard` + `routes/api.php` (ping routes tạm).
 **Verification:** `php artisan db:seed`; feature test `EnsureGuardTest` pass.
 **Dependencies:** Task 2
 **Files:** `database/seeders/RolePermissionSeeder.php`, `app/Http/Middleware/EnsureGuard.php`, `bootstrap/app.php`(alias)
 **Scope:** S
 
-### ✅ Checkpoint: Foundation (sau T1–T3)
-- [ ] `migrate:fresh --seed` sạch. `php artisan test` xanh. Review với human.
+### ✅ Checkpoint: Foundation (sau T1–T3) — ĐẠT
+- [x] `migrate:fresh --seed` sạch (2 role, 5 permission). `php artisan test` xanh (18 passed).
 
 ---
 
