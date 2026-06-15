@@ -110,18 +110,20 @@ Thứ tự: **Foundation (T1–T3) → Login slices (T4–T6) → Account flows 
 **Files:** `app/Http/Controllers/Crm/Auth/LoginController.php`, `app/Services/AuditLogger.php`, `routes/api.php`, `tests/Feature/Auth/CrmLoginTest.php`
 **Scope:** M
 
-#### Task 6: §7 Rate-limit + Lockout + TTL (cross-cutting cho login)
+#### Task 6: §7 Rate-limit + Lockout + TTL (cross-cutting cho login) ✅ DONE
 **Description:** Áp rate-limit (5 fail/60s/IP+email) → 429; lockout sau 10 fail liên tiếp → status=LOCKED; token TTL trượt 30'.
 **Acceptance criteria (map AC-07.*):**
-- [ ] AC-07.1 (429), AC-07.4 (TTL → 401), AC-07.5 (10 fail → LOCKED, 403 dù pass đúng).
+- [x] AC-07.1 (429), AC-07.4 (TTL → 401), AC-07.5 (10 fail → LOCKED, 403 dù pass đúng).
+> Tham số trong `config/auth_security.php` + `sanctum.inactivity_timeout` (override qua env) — ⚠️ **giá trị đề xuất, CẦN BA CHỐT trước merge** (Open Question §9.1). `LoginThrottle` (RateLimiter, đếm fail) + `AccountLockout` (cột `failed_login_attempts`) áp cho cả Shop & CRM. TTL trượt = Sanctum `authenticateAccessTokensUsing` dựa `last_used_at`.
 **Verification:** `php artisan test --filter=AuthHardeningTest`.
 **Dependencies:** Task 4, Task 5
 **Files:** `app/Http/Middleware/LoginRateLimit.php`, `config/sanctum.php`(expiration), `app/Services/LockoutService.php`, `tests/Feature/Auth/AuthHardeningTest.php`
 **Scope:** M
 > Tham số là *đề xuất* — chốt với BA (Open Question §9) trước khi merge.
 
-### ✅ Checkpoint: Login (sau T4–T6)
-- [ ] Cả 2 phân hệ login được, cross-access bị chặn, rate-limit/lockout hoạt động. Review.
+### ✅ Checkpoint: Login (sau T4–T6) — ĐẠT
+- [x] Cả 2 phân hệ login được, cross-access bị chặn, rate-limit/lockout/TTL hoạt động. Full suite 37 passed.
+> ⚠️ Chờ BA chốt tham số §7 trước khi merge (Open Question §9.1).
 
 ---
 

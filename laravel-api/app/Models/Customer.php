@@ -17,6 +17,7 @@ class Customer extends Authenticatable
         'email',
         'password',
         'status',
+        'failed_login_attempts',
     ];
 
     protected $hidden = [
@@ -29,6 +30,7 @@ class Customer extends Authenticatable
         return [
             'password' => 'hashed',
             'status' => UserStatus::class,
+            'failed_login_attempts' => 'integer',
         ];
     }
 }

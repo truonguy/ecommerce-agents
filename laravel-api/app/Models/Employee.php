@@ -23,6 +23,7 @@ class Employee extends Authenticatable
         'email',
         'password',
         'status',
+        'failed_login_attempts',
     ];
 
     protected $hidden = [
@@ -35,6 +36,7 @@ class Employee extends Authenticatable
         return [
             'password' => 'hashed',
             'status' => UserStatus::class,
+            'failed_login_attempts' => 'integer',
         ];
     }
 }

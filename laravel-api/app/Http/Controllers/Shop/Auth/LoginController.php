@@ -18,6 +18,7 @@ class LoginController extends Controller
         $result = $this->auth->login(
             $request->validated('email'),
             $request->validated('password'),
+            $request->ip(),
         );
 
         return response()->json($result);

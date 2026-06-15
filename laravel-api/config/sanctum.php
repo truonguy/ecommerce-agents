@@ -54,6 +54,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Inactivity Timeout (minutes)
+    |--------------------------------------------------------------------------
+    | Auto-logout sau khoảng thời gian không hoạt động (spec §7, AC-07.4).
+    | Token bị từ chối nếu last_used_at (hoặc created_at) cũ hơn giá trị này.
+    | ⚠️ Giá trị đề xuất — cần BA xác nhận (Open Question §9.1).
+    */
+
+    'inactivity_timeout' => (int) env('SANCTUM_INACTIVITY_TIMEOUT', 30),
+
+    /*
+    |--------------------------------------------------------------------------
     | Token Prefix
     |--------------------------------------------------------------------------
     |
