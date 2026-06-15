@@ -11,4 +11,9 @@ class CustomerRepository implements CustomerRepositoryInterface
     {
         return Customer::query()->where('email', $email)->first();
     }
+
+    public function create(array $data): Customer
+    {
+        return Customer::create($data);
+    }
 }

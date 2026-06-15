@@ -54,4 +54,24 @@ class CustomerAuthService
             'type' => 'customer',
         ];
     }
+
+    /**
+     * Đăng ký customer mới (status=ACTIVE, cấp token ngay — chưa bắt buộc verify email).
+     *
+     * @param  array{name: string, email: string, password: string}  $data
+     * @return array{access_token: string, type: string}
+     */
+    public function register(array $data): array
+    {
+        $customer = $this->customers->create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => $data['password'],
+        ]);
+
+        return [
+            'access_token' => $customer->createToken('shop')->plainTextToken,
+            'type' => 'customer',
+        ];
+    }
 }

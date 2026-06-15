@@ -129,9 +129,10 @@ Thứ tự: **Foundation (T1–T3) → Login slices (T4–T6) → Account flows 
 
 ### Phase 3 — Account flows
 
-#### Task 7: FR-03 Register Customer
+#### Task 7: FR-03 Register Customer ✅ DONE
 **Description:** `POST /api/shop/auth/register`, tạo customer ACTIVE, trả token; cấm tự đăng ký employee/admin.
 **Acceptance criteria:** AC-03.1–AC-03.5 pass.
+> 7 tests. `RegisterRequest` (unique:customers, Password::min(8)->letters->numbers, confirmed). `CustomerAuthService::register` + repo `create`. Email verification = KHÔNG (spec §9.4). 201 + token.
 **Verification:** `php artisan test --filter=RegisterTest`.
 **Dependencies:** Task 4
 **Files:** `app/Http/Controllers/Shop/Auth/RegisterController.php`, `app/Http/Requests/RegisterRequest.php`, `routes/api.php`, `tests/Feature/Auth/RegisterTest.php`
