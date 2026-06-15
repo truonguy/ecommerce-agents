@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Crm\Auth\LoginController as CrmLoginController;
 use App\Http\Controllers\Shop\Auth\LoginController as ShopLoginController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,8 @@ Route::prefix('shop')->group(function () {
 
 // CRM — phân hệ employee
 Route::prefix('crm')->group(function () {
+    Route::post('/auth/login', CrmLoginController::class);
+
     Route::middleware('ensure_guard:employee')->get('/ping', function (Request $request) {
         return ['type' => 'employee', 'id' => $request->user()->id];
     });

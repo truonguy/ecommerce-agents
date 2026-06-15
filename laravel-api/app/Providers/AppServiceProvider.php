@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Repositories\Contracts\CustomerRepositoryInterface;
+use App\Repositories\Contracts\EmployeeRepositoryInterface;
 use App\Repositories\Eloquent\CustomerRepository;
+use App\Repositories\Eloquent\EmployeeRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public array $bindings = [
         CustomerRepositoryInterface::class => CustomerRepository::class,
+        EmployeeRepositoryInterface::class => EmployeeRepository::class,
     ];
 
     /**

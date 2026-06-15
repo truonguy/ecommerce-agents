@@ -99,11 +99,12 @@ Thứ tự: **Foundation (T1–T3) → Login slices (T4–T6) → Account flows 
 **Files:** `app/Http/Controllers/Shop/Auth/LoginController.php`, `routes/api.php`, `tests/Feature/Auth/ShopLoginTest.php`
 **Scope:** M
 
-#### Task 5: FR-02 CRM Login (+ audit log + role trong response)
+#### Task 5: FR-02 CRM Login (+ audit log + role trong response) ✅ DONE
 **Description:** `POST /api/crm/auth/login` qua guard employee, trả `{access_token,type:"employee",role}`, ghi audit_logs cho mọi lần (success/fail).
 **Acceptance criteria (map AC-02.*):**
-- [ ] AC-02.1, AC-02.2 (admin → role="admin"), AC-02.3, AC-02.4, AC-02.5, AC-02.8 pass.
-- [ ] AC-02.7: audit_logs có bản ghi cho cả fail và success.
+- [x] AC-02.1, AC-02.2 (admin → role="admin"), AC-02.3, AC-02.4, AC-02.5, AC-02.8 pass.
+- [x] AC-02.7: audit_logs có bản ghi cho cả fail và success.
+> 7 tests. Pattern: Controller → `Crm\EmployeeAuthService` → `EmployeeRepository` + `AuditLogger`/`AuditLog`. role = `getRoleNames()->first()`.
 **Verification:** `php artisan test --filter=CrmLoginTest`.
 **Dependencies:** Task 3
 **Files:** `app/Http/Controllers/Crm/Auth/LoginController.php`, `app/Services/AuditLogger.php`, `routes/api.php`, `tests/Feature/Auth/CrmLoginTest.php`
