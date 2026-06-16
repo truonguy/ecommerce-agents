@@ -47,5 +47,12 @@ Route::prefix('crm')->group(function () {
         Route::get('/ping', function (Request $request) {
             return ['type' => 'employee', 'id' => $request->user()->id];
         });
+
+        // Endpoint nghiệp vụ CRM — bảo vệ theo permission (RBAC). Skeleton; CRUD thật ở T11.
+        Route::middleware('permission:manage_product')->get('/products', fn () => ['data' => []]);
+        Route::middleware('permission:manage_order')->get('/orders', fn () => ['data' => []]);
+        Route::middleware('permission:manage_customer')->get('/customers', fn () => ['data' => []]);
+        Route::middleware('permission:manage_employee')->get('/employees', fn () => ['data' => []]);
+        Route::middleware('permission:system_config')->get('/system-config', fn () => ['data' => []]);
     });
 });

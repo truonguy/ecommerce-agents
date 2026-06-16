@@ -164,9 +164,10 @@ Thứ tự: **Foundation (T1–T3) → Login slices (T4–T6) → Account flows 
 
 ### Phase 4 — Authorization
 
-#### Task 10: RBAC enforcement + policies cho CRM endpoints
+#### Task 10: RBAC enforcement + policies cho CRM endpoints ✅ DONE
 **Description:** Middleware `permission:` (spatie) + policies; bảo vệ nhóm route CRM theo permission.
 **Acceptance criteria:** AC-06.1–AC-06.4 pass (employee không chạm manage_employee/system_config; customer token → 401/403).
+> 6 tests. Đăng ký spatie middleware alias (`permission`/`role`/`role_or_permission`). Endpoint skeleton products/orders/customers/employees/system-config guard theo permission, sau `ensure_guard:employee`. Customer token → 401 (ensure_guard); employee thiếu quyền → 403 (spatie). CRUD thật ở T11.
 **Verification:** `php artisan test --filter=RbacTest`.
 **Dependencies:** Task 5
 **Files:** `routes/api.php`(middleware groups), `app/Policies/*`, `tests/Feature/Auth/RbacTest.php`
