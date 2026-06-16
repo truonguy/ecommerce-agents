@@ -3,6 +3,7 @@
 use App\Http\Controllers\Crm\Auth\LoginController as CrmLoginController;
 use App\Http\Controllers\Crm\Auth\LogoutController as CrmLogoutController;
 use App\Http\Controllers\Crm\Auth\PasswordController as CrmPasswordController;
+use App\Http\Controllers\Crm\CategoryController;
 use App\Http\Controllers\Crm\EmployeeController;
 use App\Http\Controllers\Shop\Auth\LoginController as ShopLoginController;
 use App\Http\Controllers\Shop\Auth\LogoutController as ShopLogoutController;
@@ -49,7 +50,14 @@ Route::prefix('crm')->group(function () {
             return ['type' => 'employee', 'id' => $request->user()->id];
         });
 
-        // Endpoint nghiệp vụ CRM — bảo vệ theo permission (RBAC). Skeleton; CRUD thật ở T11.
+        // Endpoint nghiệp vụ CRM — bảo vệ theo permission (RBAC).
+        Route::middleware('permission:manage_product')->group(function () {
+            Route::get('/categories', [CategoryController::class, 'index']);
+            Route::post('/categories', [CategoryController::class, 'store']);
+            Route::put('/categories/{category}', [CategoryController::class, 'update']);
+            Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);
+        });
+
         Route::middleware('permission:manage_product')->get('/products', fn () => ['data' => []]);
         Route::middleware('permission:manage_order')->get('/orders', fn () => ['data' => []]);
         Route::middleware('permission:manage_customer')->get('/customers', fn () => ['data' => []]);

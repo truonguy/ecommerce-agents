@@ -67,9 +67,10 @@ Thứ tự: **Foundation (T1–T2) → CRM CRUD (T3–T6) → Shop (T7–T9) →
 
 ### Phase 2 — CRM CRUD
 
-#### Task 3: Category CRUD (CRM) · `permission:manage_product`
+#### Task 3: Category CRUD (CRM) · `permission:manage_product` ✅ DONE
 **Description:** `GET/POST/PUT/DELETE /api/crm/categories`; nested parent_id; slug auto-gen; soft delete.
 **Acceptance (FR-P2):** AC-P2.1–P2.4 pass (CRUD, soft delete, RBAC 401/403, slug unique 422).
+> 9 tests. Layered Controller→Service→Repository. slug auto-gen (`prepareForValidation`). **Quyết định:** hard unique slug + validation tính cả bản trashed (KHÔNG reuse slug sau soft-delete — không yêu cầu trong spec; tránh 500). customer→401, employee thiếu manage_product→403.
 **Verify:** `php artisan test --filter=CategoryCrudTest`.
 **Dependencies:** T1, T2
 **Files:** `Crm/CategoryController`, `Http/Requests/Crm/{Store,Update}CategoryRequest`, `Services/Crm/CategoryService`, `Repositories/{Contracts,Eloquent}/CategoryRepository*`, route, test
