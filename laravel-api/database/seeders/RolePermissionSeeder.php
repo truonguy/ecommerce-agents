@@ -20,12 +20,15 @@ class RolePermissionSeeder extends Seeder
         'manage_customer',
         'manage_employee',
         'system_config',
+        'publish_product',
+        'manage_inventory',
     ];
 
     private const EMPLOYEE_PERMISSIONS = [
         'manage_product',
         'manage_order',
         'manage_customer',
+        'manage_inventory',
     ];
 
     public function run(): void

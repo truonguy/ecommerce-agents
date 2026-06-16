@@ -24,15 +24,20 @@ class RolePermissionSeederTest extends TestCase
         $this->assertTrue($employee->hasPermissionTo('manage_product'));
         $this->assertTrue($employee->hasPermissionTo('manage_order'));
         $this->assertTrue($employee->hasPermissionTo('manage_customer'));
+        $this->assertTrue($employee->hasPermissionTo('manage_inventory'));
         $this->assertFalse($employee->hasPermissionTo('manage_employee'));
         $this->assertFalse($employee->hasPermissionTo('system_config'));
+        $this->assertFalse($employee->hasPermissionTo('publish_product'));
     }
 
     public function test_admin_role_has_all_permissions(): void
     {
         $admin = Role::where('name', 'admin')->where('guard_name', 'employee')->firstOrFail();
 
-        foreach (['manage_product', 'manage_order', 'manage_customer', 'manage_employee', 'system_config'] as $perm) {
+        foreach ([
+            'manage_product', 'manage_order', 'manage_customer', 'manage_employee', 'system_config',
+            'publish_product', 'manage_inventory',
+        ] as $perm) {
             $this->assertTrue($admin->hasPermissionTo($perm), "admin missing $perm");
         }
     }

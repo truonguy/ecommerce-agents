@@ -50,18 +50,18 @@ Thứ tự: **Foundation (T1–T2) → CRM CRUD (T3–T6) → Shop (T7–T9) →
 **Scope:** L → *thực thi theo 2 lần verify (schema rồi models)*; nếu quá lớn tách T1a (migrations) / T1b (models).
 > ⚠️ *Ask first* — dependency `intervention/image`.
 
-#### Task 2: RBAC permissions mới + seeder
+#### Task 2: RBAC permissions mới + seeder ✅ DONE
 **Description:** Thêm `publish_product`, `manage_inventory` vào `RolePermissionSeeder`; admin có hết, employee có `manage_product`+`manage_inventory` (không publish).
 **Acceptance:**
-- [ ] Seeder tạo 2 permission mới; employee KHÔNG có `publish_product`.
-- [ ] Test RBAC seed mở rộng pass; không vỡ test Auth cũ.
+- [x] Seeder tạo 2 permission mới; employee KHÔNG có `publish_product`.
+- [x] Test RBAC seed mở rộng pass; không vỡ test Auth cũ.
 **Verify:** `php artisan test --filter=RolePermissionSeeder`.
 **Dependencies:** None (độc lập T1)
 **Files:** `database/seeders/RolePermissionSeeder.php`, `tests/Feature/Auth/RolePermissionSeederTest.php`
 **Scope:** S
 
-### ✅ Checkpoint: Foundation (T1–T2)
-- [ ] `migrate:fresh --seed` sạch; full suite xanh (gồm test Auth cũ). Review.
+### ✅ Checkpoint: Foundation (T1–T2) — ĐẠT
+- [x] `migrate:fresh --seed` sạch; full suite 76 passed (gồm test Auth cũ).
 
 ---
 
