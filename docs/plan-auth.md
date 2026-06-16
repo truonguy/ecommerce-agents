@@ -148,16 +148,17 @@ Thứ tự: **Foundation (T1–T3) → Login slices (T4–T6) → Account flows 
 **Scope:** M
 > Open Question §9: email driver thật — test dùng `Mail::fake()`, cấu hình SMTP chốt sau.
 
-#### Task 9: FR-05 Logout / Logout-all
+#### Task 9: FR-05 Logout / Logout-all ✅ DONE
 **Description:** logout (revoke token hiện tại) cho cả 2; logout-all (CRM) revoke toàn bộ token user.
 **Acceptance criteria:** AC-05.1, AC-05.2 pass.
+> 4 tests. logout = `currentAccessToken()->delete()`; logout-all (CRM) = `tokens()->delete()`. Routes bảo vệ bằng `ensure_guard`.
 **Verification:** `php artisan test --filter=LogoutTest`.
 **Dependencies:** Task 4, Task 5
 **Files:** `app/Http/Controllers/Crm/Auth/LogoutController.php`, `app/Http/Controllers/Shop/Auth/LogoutController.php`, `routes/api.php`, `tests/Feature/Auth/LogoutTest.php`
 **Scope:** S
 
-### ✅ Checkpoint: Account flows (sau T7–T9)
-- [ ] Register/reset/logout end-to-end pass; reset revoke token cũ. Review.
+### ✅ Checkpoint: Account flows (sau T7–T9) — ĐẠT
+- [x] Register/reset/logout end-to-end pass; reset revoke token cũ. Full suite 55 passed.
 
 ---
 

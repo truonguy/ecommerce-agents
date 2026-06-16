@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\Crm\Auth\LoginController as CrmLoginController;
+use App\Http\Controllers\Crm\Auth\LogoutController as CrmLogoutController;
 use App\Http\Controllers\Crm\Auth\PasswordController as CrmPasswordController;
 use App\Http\Controllers\Shop\Auth\LoginController as ShopLoginController;
+use App\Http\Controllers\Shop\Auth\LogoutController as ShopLogoutController;
 use App\Http\Controllers\Shop\Auth\PasswordController as ShopPasswordController;
 use App\Http\Controllers\Shop\Auth\RegisterController as ShopRegisterController;
 use Illuminate\Http\Request;
@@ -23,8 +25,12 @@ Route::prefix('shop')->group(function () {
     Route::post('/auth/forgot-password', [ShopPasswordController::class, 'forgot']);
     Route::post('/auth/reset-password', [ShopPasswordController::class, 'reset']);
 
-    Route::middleware('ensure_guard:customer')->get('/ping', function (Request $request) {
-        return ['type' => 'customer', 'id' => $request->user()->id];
+    Route::middleware('ensure_guard:customer')->group(function () {
+        Route::post('/auth/logout', ShopLogoutController::class);
+
+        Route::get('/ping', function (Request $request) {
+            return ['type' => 'customer', 'id' => $request->user()->id];
+        });
     });
 });
 
@@ -34,7 +40,12 @@ Route::prefix('crm')->group(function () {
     Route::post('/auth/forgot-password', [CrmPasswordController::class, 'forgot']);
     Route::post('/auth/reset-password', [CrmPasswordController::class, 'reset']);
 
-    Route::middleware('ensure_guard:employee')->get('/ping', function (Request $request) {
-        return ['type' => 'employee', 'id' => $request->user()->id];
+    Route::middleware('ensure_guard:employee')->group(function () {
+        Route::post('/auth/logout', [CrmLogoutController::class, 'logout']);
+        Route::post('/auth/logout-all', [CrmLogoutController::class, 'logoutAll']);
+
+        Route::get('/ping', function (Request $request) {
+            return ['type' => 'employee', 'id' => $request->user()->id];
+        });
     });
 });
