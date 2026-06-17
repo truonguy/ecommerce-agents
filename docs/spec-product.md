@@ -191,12 +191,13 @@ AC-P10.3  customer token → mọi /api/crm/* 401
 | 5 | Reserve cart/checkout | ✅ **CHỐT: out-of-scope** (chỉ field `reserved_stock`) |
 | 6 | Product review | ✅ **CHỐT: out-of-scope** |
 | 7 | Category nested | ✅ **CHỐT: có `parent_id`** |
-| 8 | Search dataset/index target | ⏳ **CHỜ** — cần BA cho kích thước dữ liệu mục tiêu; đề xuất index `(publish_status, category_id)`, `slug`, fulltext `name,description`. Benchmark <300ms trên tập mẫu (đề xuất 10k products). Không chặn Plan. |
+| 8 | Search dataset/index target | ⏳ **CHỜ BA** — index đã có (`(publish_status,category_id)`, `(product_id,price)`, fulltext `products(name,description)`). Keyword hiện dùng LIKE; benchmark sanity 120 sp ~170ms. Mục tiêu **<300ms thực** cần dataset target (đề xuất 10k) + chuyển sang `whereFullText`. Chặn merge khi BA chốt số. |
 
-## 10. Success Criteria
-- [ ] AC-P1..P10 pass bằng feature test.
-- [ ] Shop chỉ thấy PUBLISHED; CRM CRUD đầy đủ.
-- [ ] Inventory không âm.
-- [ ] employee không publish; customer không chạm CRM.
-- [ ] Search có index + đo được thời gian (mục tiêu <300ms).
-- [ ] 8 điểm §9 được chốt và spec cập nhật trước Implement.
+## 10. Success Criteria — trạng thái (sau T1–T11)
+- [x] AC-P1..P10 pass bằng feature test (**146 tests / 394 assertions xanh**, gồm 70 Auth + 76 Catalog).
+- [x] Shop chỉ thấy PUBLISHED; CRM CRUD đầy đủ (category/product/variant/inventory/media).
+- [x] Inventory không âm (validate min:0).
+- [x] employee không publish (403); customer không chạm CRM (401).
+- [x] Search có index (fulltext + composite) + đo được thời gian (sanity ~170ms/120sp). Mục tiêu <300ms thực: chờ dataset (OQ §9.8).
+- [x] §9 các điểm đã chốt (trừ #8 chờ BA dataset); spec cập nhật.
+- [~] Coverage ≥80%: **không đo tự động** (môi trường thiếu Xdebug/PCOV — như Auth). Định tính: 11 file test Catalog phủ mọi endpoint/service.

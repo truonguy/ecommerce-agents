@@ -162,19 +162,21 @@ Thứ tự: **Foundation (T1–T2) → CRM CRUD (T3–T6) → Shop (T7–T9) →
 
 ### Phase 5 — Hardening
 
-#### Task 11: Tests + benchmark + cập nhật spec
+#### Task 11: Tests + benchmark + cập nhật spec ✅ DONE
 **Description:** Rà coverage (định tính nếu thiếu driver), benchmark search, generic errors, Pint; cập nhật spec OQ §9.8.
 **Acceptance (FR-P11):**
-- [ ] Mọi AC-P1..P10 pass; full suite (gồm Auth) xanh.
-- [ ] Search benchmark đo được (báo cáo thời gian); index có mặt.
-- [ ] `docs/spec-product.md` cập nhật kết luận; Pint clean.
+- [x] Mọi AC-P1..P10 pass; full suite 146 passed (gồm Auth) xanh.
+- [x] Search benchmark đo được (~170ms/120sp); fulltext + composite index có mặt.
+- [x] `docs/spec-product.md` §9/§10 cập nhật; Pint clean.
+> Coverage số: không đo tự động (thiếu Xdebug/PCOV). Định tính: 11 file test Catalog phủ hết.
 **Verify:** `php artisan test`; `./vendor/bin/pint --test`.
 **Dependencies:** T1–T10
 **Files:** `tests/*`, `docs/spec-product.md`
 **Scope:** M
 
-### ✅ Checkpoint: Complete
-- [ ] Success Criteria spec §10 đạt; sẵn sàng review/merge.
+### ✅ Checkpoint: Complete — ĐẠT
+- [x] Success Criteria spec §10 đạt (146 tests / 394 assertions, Pint clean).
+- ⏳ Chặn merge: BA chốt search dataset/index target (OQ §9.8).
 
 ---
 
