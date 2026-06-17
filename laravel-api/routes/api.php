@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 
 // Public catalog (Shop) — không cần token, chỉ PUBLISHED
 Route::get('/products', [CatalogController::class, 'index']);
+Route::get('/products/{slug}', [CatalogController::class, 'show']);
 
 // Shop — phân hệ customer
 Route::prefix('shop')->group(function () {

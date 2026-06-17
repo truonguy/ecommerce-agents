@@ -23,4 +23,13 @@ class CatalogController extends Controller
 
         return response()->json($this->pagination->format($paginator));
     }
+
+    public function show(string $slug): JsonResponse
+    {
+        $product = $this->search->findPublishedBySlug($slug);
+
+        abort_if($product === null, 404);
+
+        return response()->json($product);
+    }
 }

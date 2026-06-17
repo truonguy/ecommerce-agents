@@ -120,9 +120,10 @@ Thứ tự: **Foundation (T1–T2) → CRM CRUD (T3–T6) → Shop (T7–T9) →
 **Files:** `Shop/CatalogController`(index), `Services/Catalog/ProductSearchService`(criteria), route (ngoài ensure_guard), test
 **Scope:** M
 
-#### Task 8: Shop Product Detail · public
+#### Task 8: Shop Product Detail · public ✅ DONE
 **Description:** `GET /api/products/{slug}` — load category + variants (+ available stock); chưa publish/soft-deleted → 404.
 **Acceptance (FR-P7):** AC-P7.1–P7.2.
+> 6 tests. `findPublishedBySlug` (with category + variants.inventory). DRAFT/ARCHIVED/soft-deleted/unknown → 404. Public.
 **Verify:** `php artisan test --filter=ShopDetailTest`.
 **Dependencies:** T7
 **Files:** `Shop/CatalogController`(show), route, test

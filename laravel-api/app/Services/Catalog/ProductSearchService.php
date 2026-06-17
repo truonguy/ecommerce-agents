@@ -47,4 +47,17 @@ class ProductSearchService
 
         return $this->pagination->paginate($query, $filters['per_page'] ?? null);
     }
+
+    /**
+     * Lấy 1 sản phẩm PUBLISHED theo slug (kèm category + variants + inventory).
+     * Trả null nếu không tồn tại / chưa publish / đã soft-delete (SoftDeletes tự ẩn).
+     */
+    public function findPublishedBySlug(string $slug): ?Product
+    {
+        return Product::query()
+            ->where('publish_status', PublishStatus::PUBLISHED->value)
+            ->where('slug', $slug)
+            ->with(['category', 'variants.inventory'])
+            ->first();
+    }
 }
