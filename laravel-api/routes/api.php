@@ -12,6 +12,7 @@ use App\Http\Controllers\Crm\VariantController;
 use App\Http\Controllers\Shop\Auth\LoginController as ShopLoginController;
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CatalogController;
+use App\Http\Controllers\Shop\CheckoutController;
 use App\Http\Controllers\Shop\Auth\LogoutController as ShopLogoutController;
 use App\Http\Controllers\Shop\Auth\PasswordController as ShopPasswordController;
 use App\Http\Controllers\Shop\Auth\RegisterController as ShopRegisterController;
@@ -36,6 +37,8 @@ Route::middleware('ensure_guard:customer')->group(function () {
     Route::post('/cart/items', [CartController::class, 'store']);
     Route::put('/cart/items/{item}', [CartController::class, 'update']);
     Route::delete('/cart/items/{item}', [CartController::class, 'destroy']);
+
+    Route::post('/checkout', [CheckoutController::class, 'store']);
 });
 
 // Shop — phân hệ customer

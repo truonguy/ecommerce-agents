@@ -108,9 +108,10 @@ Thứ tự: **Cart (T1–T5) → Order schema + reserve (T6–T7) → Checkout (
 
 ### Phase 3 — Checkout + Order views
 
-#### Task 7: Checkout (transaction) · `POST /api/checkout`
+#### Task 7: Checkout (transaction) · `POST /api/checkout` ✅ DONE
 **Description:** `CheckoutService` trong DB transaction: validate cart non-empty + shipping info → reserve từng item (lock) → snapshot giá → tạo order PENDING → clear cart. Thiếu tồn → rollback toàn bộ.
 **Acceptance (FR-C6):** AC-C6.1–C6.6 (rollback khi thiếu tồn; snapshot; cart rỗng sau; chỉ customer).
+> 6 tests. `CheckoutService` (DB::transaction) → reserve (lock) → OrderService.create (order+items snapshot) → clear cart. Thiếu tồn 1 item → rollback (0 order, inventory & cart nguyên). Đọc header Idempotency-Key (dedupe ở T10). Chỉ customer.
 **Verify:** `php artisan test --filter=CheckoutTest`.
 **Dependencies:** T4, T5, T6
 **Files:** `Shop/CheckoutController`, `Http/Requests/Shop/CheckoutRequest`, `Services/Shop/CheckoutService`, `Services/Order/OrderService`, `Repositories/.../OrderRepository*`, route, test
