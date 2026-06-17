@@ -40,9 +40,10 @@ Thứ tự: **Cart (T1–T5) → Order schema + reserve (T6–T7) → Checkout (
 
 ### Phase 1 — Cart (customer)
 
-#### Task 1: Cart schema + models
+#### Task 1: Cart schema + models ✅ DONE
 **Description:** Migration `carts` (customer_id unique), `cart_items` (unique cart_id+variant, qty>0); model Cart/CartItem + quan hệ + factories.
 **Acceptance (FR-C1):** AC-C1.1 (migrate sạch, 1 customer=1 cart), AC-C1.2 (unique cart+variant, qty>0).
+> 4 tests. carts.customer_id unique (1 cart/customer); cart_items unique(cart_id,variant). qty>0 enforce ở validation (T2). Models + factories.
 **Verify:** `php artisan test --filter=CartSchemaTest`.
 **Dependencies:** None
 **Files:** `database/migrations/*`(×2), `app/Models/{Cart,CartItem}.php`, factories
