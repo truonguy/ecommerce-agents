@@ -17,7 +17,7 @@ class CatalogController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $filters = $request->only(['category_id', 'price_min', 'price_max', 'sort', 'per_page']);
+        $filters = $request->only(['q', 'category_id', 'price_min', 'price_max', 'sort', 'per_page']);
 
         $paginator = $this->search->search($filters);
 

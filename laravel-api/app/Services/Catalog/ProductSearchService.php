@@ -26,6 +26,16 @@ class ProductSearchService
             ->where('publish_status', PublishStatus::PUBLISHED->value)
             ->withMin('variants', 'price');
 
+        if (! empty($filters['q'])) {
+            $keyword = $filters['q'];
+            // LIKE substring (chính xác & ổn định trong transaction test). Fulltext index
+            // có sẵn cho scale lớn — chuyển sang whereFullText khi chốt dataset (OQ §9.8).
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'like', "%{$keyword}%")
+                    ->orWhere('description', 'like', "%{$keyword}%");
+            });
+        }
+
         if (! empty($filters['category_id'])) {
             $query->where('category_id', $filters['category_id']);
         }

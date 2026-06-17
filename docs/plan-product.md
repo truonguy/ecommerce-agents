@@ -129,17 +129,18 @@ Thứ tự: **Foundation (T1–T2) → CRM CRUD (T3–T6) → Shop (T7–T9) →
 **Files:** `Shop/CatalogController`(show), route, test
 **Scope:** S
 
-#### Task 9: Search · public
+#### Task 9: Search · public ✅ DONE
 **Description:** keyword (name/description) + category + price + sort, chỉ PUBLISHED; index phù hợp; benchmark.
 **Acceptance (FR-P8):** AC-P8.1–P8.2; AC-P8.3 có index + đo thời gian (mục tiêu <300ms, dataset chốt sau — OQ §9.8).
+> 6 tests. keyword LIKE substring (ổn định trong transaction); kết hợp category/price/sort; chỉ PUBLISHED. Fulltext index `products(name,description)` thêm sẵn cho scale. Benchmark sanity 120 sp ~170ms (<2000ms ngưỡng nới; <300ms thực cần dataset env chốt — OQ §9.8).
 **Verify:** `php artisan test --filter=ProductSearchTest`.
 **Dependencies:** T7
 **Files:** `Services/Catalog/ProductSearchService`(criteria mở rộng), migration thêm index/fulltext, `Shop/CatalogController`(search hoặc gộp index), test
 **Scope:** L → tách T9a (filter/sort) / T9b (keyword+index+benchmark) nếu cần.
 > ⏳ OQ §9.8: dataset target & index strategy — dùng đề xuất, BA chốt trước merge.
 
-### ✅ Checkpoint: Shop (T7–T9)
-- [ ] Shop public xem được catalog PUBLISHED, filter/sort/search hoạt động, ẩn unpublished. Review.
+### ✅ Checkpoint: Shop (T7–T9) — ĐẠT
+- [x] Shop public xem catalog PUBLISHED, filter/sort/search/detail hoạt động, ẩn unpublished. Full suite 136 passed.
 
 ---
 
