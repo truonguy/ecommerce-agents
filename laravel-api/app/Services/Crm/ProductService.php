@@ -44,4 +44,14 @@ class ProductService
     {
         $this->products->delete($product);
     }
+
+    public function publish(Product $product): Product
+    {
+        return $this->products->update($product, ['publish_status' => PublishStatus::PUBLISHED->value]);
+    }
+
+    public function unpublish(Product $product): Product
+    {
+        return $this->products->update($product, ['publish_status' => PublishStatus::DRAFT->value]);
+    }
 }

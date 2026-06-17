@@ -46,4 +46,14 @@ class ProductController extends Controller
 
         return response()->noContent();
     }
+
+    public function publish(Product $product): JsonResponse
+    {
+        return response()->json($this->products->publish($product));
+    }
+
+    public function unpublish(Product $product): JsonResponse
+    {
+        return response()->json($this->products->unpublish($product));
+    }
 }

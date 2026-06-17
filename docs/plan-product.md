@@ -94,16 +94,17 @@ Thứ tự: **Foundation (T1–T2) → CRM CRUD (T3–T6) → Shop (T7–T9) →
 **Files:** `Crm/VariantController`, `Http/Requests/Crm/StoreVariantRequest`, `Services/Crm/VariantService`, `Repositories/.../VariantRepository*`, route, test
 **Scope:** M
 
-#### Task 6: Inventory + Publish gate
+#### Task 6: Inventory + Publish gate ✅ DONE
 **Description:** (a) Inventory per-variant (`manage_inventory`): cập nhật available/reserved, invariant available>=0. (b) Publish gate: đổi publish_status→PUBLISHED yêu cầu `publish_product`.
 **Acceptance (FR-P5, FR-P10 phần publish):** AC-P5.1–P5.3, AC-P10.1 (employee không publish→403), AC-P10.2.
+> 10 tests. Inventory `PUT /variants/{variant}/inventory` (`manage_inventory`, upsert, min:0). Publish/unpublish `POST /products/{product}/(un)publish` (`publish_product`). employee không publish→403; customer→401.
 **Verify:** `php artisan test --filter="InventoryTest|PublishGateTest"`.
 **Dependencies:** T5
 **Files:** `Crm/InventoryController`, `Http/Requests/Crm/UpdateInventoryRequest`, `Services/Crm/InventoryService`, `Policies/ProductPolicy`(publish) hoặc middleware `permission:publish_product`, route, tests
 **Scope:** M
 
-### ✅ Checkpoint: CRM CRUD (T3–T6)
-- [ ] CRM CRUD đầy đủ; RBAC (manage_product/manage_inventory/publish_product) đúng; inventory không âm. Review.
+### ✅ Checkpoint: CRM CRUD (T3–T6) — ĐẠT
+- [x] CRM CRUD đầy đủ; RBAC (manage_product/manage_inventory/publish_product) đúng; inventory không âm. Full suite 116 passed.
 
 ---
 

@@ -5,6 +5,7 @@ use App\Http\Controllers\Crm\Auth\LogoutController as CrmLogoutController;
 use App\Http\Controllers\Crm\Auth\PasswordController as CrmPasswordController;
 use App\Http\Controllers\Crm\CategoryController;
 use App\Http\Controllers\Crm\EmployeeController;
+use App\Http\Controllers\Crm\InventoryController;
 use App\Http\Controllers\Crm\ProductController;
 use App\Http\Controllers\Crm\VariantController;
 use App\Http\Controllers\Shop\Auth\LoginController as ShopLoginController;
@@ -69,6 +70,16 @@ Route::prefix('crm')->group(function () {
             Route::post('/products/{product}/variants', [VariantController::class, 'store']);
             Route::put('/variants/{variant}', [VariantController::class, 'update']);
             Route::delete('/variants/{variant}', [VariantController::class, 'destroy']);
+        });
+
+        // Inventory — quyền riêng manage_inventory
+        Route::middleware('permission:manage_inventory')
+            ->put('/variants/{variant}/inventory', [InventoryController::class, 'update']);
+
+        // Publish gate — quyền riêng publish_product (employee thường KHÔNG có)
+        Route::middleware('permission:publish_product')->group(function () {
+            Route::post('/products/{product}/publish', [ProductController::class, 'publish']);
+            Route::post('/products/{product}/unpublish', [ProductController::class, 'unpublish']);
         });
         Route::middleware('permission:manage_order')->get('/orders', fn () => ['data' => []]);
         Route::middleware('permission:manage_customer')->get('/customers', fn () => ['data' => []]);
