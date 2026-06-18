@@ -63,9 +63,10 @@ Thứ tự: **Foundation (T1–T2) → Gateway (T3) → Create (T4) → Webhook+
 
 ### Phase 2 — Gateway + Create
 
-#### Task 3: Gateway abstraction (interface + Cod + Vnpay + Manager)
+#### Task 3: Gateway abstraction (interface + Cod + Vnpay + Manager) ✅ DONE
 **Description:** Interface `PaymentGateway` (`create(Payment): {url, ref}`, `verify(array): {ref, status, valid}`, `query(ref): status`); `CodAdapter` (create → SUCCESS ngay, no url), `VnpayAdapter` (build URL + verify secure hash HMAC), `GatewayManager` resolve theo method. Config secret qua env.
 **Acceptance (FR-PM4):** AC-PM4.1–PM4.3.
+> 7 tests. `config/payment.php` (timeout 15', vnpay creds env). VnpayAdapter HMAC-SHA512 (`hash()` public, amount ×100); verify check chữ ký + ResponseCode 00→SUCCESS. CodAdapter url=null ref=COD-. GatewayManager resolve cod/vnpay, lạ→InvalidArgumentException. Không thêm SDK.
 **Verify:** `php artisan test --filter=GatewayTest`.
 **Dependencies:** T1
 **Files:** `app/Services/Payment/Gateways/{PaymentGateway,CodAdapter,VnpayAdapter,GatewayManager}.php`, `config/payment.php`, test
