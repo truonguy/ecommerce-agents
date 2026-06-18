@@ -38,9 +38,10 @@ Thứ tự: **Foundation (T1–T2) → Gateway (T3) → Create (T4) → Webhook+
 
 ### Phase 1 — Foundation
 
-#### Task 1: Payment schema + enums + models
+#### Task 1: Payment schema + enums + models ✅ DONE
 **Description:** Migration `payments` (order_id unique, method, gateway, amount int, status) + `payment_attempts` (payment_id, provider_txn_ref unique-nullable, status, raw_payload json); enums `PaymentStatus`/`PaymentMethod`; models + quan hệ + factories.
 **Acceptance (FR-PM1):** AC-PM1.1 (1 order→1 payment→many attempts), AC-PM1.2 (unique provider_txn_ref).
+> 6 tests. payments.order_id unique (1/order); payment_attempts.provider_txn_ref unique-nullable (dedupe). amount unsignedBigInteger (VND). enums + raw_payload array cast. factories (cod()/status()).
 **Verify:** `php artisan test --filter=PaymentSchemaTest`.
 **Dependencies:** None
 **Files:** `database/migrations/*`(×2), `app/Models/{Payment,PaymentAttempt}.php`, `app/Enums/{PaymentStatus,PaymentMethod}.php`, factories
