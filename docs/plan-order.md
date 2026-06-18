@@ -151,16 +151,17 @@ Thứ tự: **Cart (T1–T5) → Order schema + reserve (T6–T7) → Checkout (
 **Files:** `CheckoutService`(idempotency), `CheckoutController`(đọc header), migration (nếu chưa có cột), test
 **Scope:** M
 
-#### Task 11: Wrap-up — tests + Pint + cập nhật spec
+#### Task 11: Wrap-up — tests + Pint + cập nhật spec ✅ DONE
 **Description:** Rà full suite, Pint, cập nhật spec-order §9/§10; ghi chú coverage (định tính).
 **Acceptance:** Mọi AC-C* pass; full suite (gồm Auth+Product) xanh; Pint clean; spec cập nhật.
+> Fix deprecation `@dataProvider` → `#[DataProvider]` (hết warning). Pint clean. Full suite 215 passed. Spec §10 cập nhật.
 **Verify:** `php artisan test`; `./vendor/bin/pint --test`.
 **Dependencies:** T1–T10
 **Files:** `tests/*`, `docs/spec-order.md`
 **Scope:** S
 
-### ✅ Checkpoint: Complete
-- [ ] Success Criteria spec §10 đạt; sẵn sàng review/merge.
+### ✅ Checkpoint: Complete — ĐẠT
+- [x] Success Criteria spec §10 đạt (215 tests / 555 assertions, Pint clean, no warnings).
 
 ---
 

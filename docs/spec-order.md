@@ -184,11 +184,12 @@ Feature tests `tests/Feature/{Cart,Checkout,Order}/` trên MySQL `laravel_test`,
 | 8 | Shipping address | ✅ **TRONG scope** — order lưu recipient/phone/address; checkout yêu cầu |
 | 9 | Idempotency | ✅ **header `Idempotency-Key`** + `orders.idempotency_key` unique |
 
-## 10. Success Criteria
-- [ ] AC-C1..C11 pass bằng feature test.
-- [ ] Customer checkout được; cart→order đúng snapshot.
-- [ ] Inventory không âm / không oversell (lock + invariant).
-- [ ] Order lifecycle theo state machine; transition sai → 422.
-- [ ] Không duplicate order (idempotency).
-- [ ] customer chỉ thấy order mình; CRM cần manage_order.
-- [ ] 9 điểm §9 được chốt và spec cập nhật trước Implement.
+## 10. Success Criteria — trạng thái (sau T1–T11)
+- [x] AC-C1..C12 pass bằng feature test (**215 tests / 555 assertions xanh** — gồm Auth+Product+Cart/Order).
+- [x] Customer checkout được; cart→order snapshot giá đúng.
+- [x] Inventory không âm / không oversell (lockForUpdate + invariant; verify tồn=1).
+- [x] Order lifecycle theo state machine; transition sai → 422.
+- [x] Không duplicate order (Idempotency-Key + unique + race backstop).
+- [x] customer chỉ thấy/huỷ order mình (PENDING); CRM cần `manage_order`.
+- [x] 9 điểm §9 đã chốt; spec cập nhật.
+- [~] Coverage số: không đo tự động (môi trường thiếu Xdebug/PCOV — như Auth/Product). Định tính: tests/Feature/{Cart,Checkout,Order} phủ mọi endpoint/service.

@@ -5,6 +5,7 @@ namespace App\Services\Order;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\ProductVariant;
 use App\Repositories\Contracts\OrderRepositoryInterface;
 use App\Services\Support\PaginationService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -93,7 +94,7 @@ class OrderService
         }
     }
 
-    private function variantOf(OrderItem $item): ?\App\Models\ProductVariant
+    private function variantOf(OrderItem $item): ?ProductVariant
     {
         // withTrashed: variant có thể đã bị soft-delete sau khi đặt hàng.
         return $item->variant()->withTrashed()->first();
