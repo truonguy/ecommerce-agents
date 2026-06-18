@@ -142,9 +142,10 @@ Thứ tự: **Cart (T1–T5) → Order schema + reserve (T6–T7) → Checkout (
 
 ### Phase 4 — Hardening
 
-#### Task 10: Idempotency + Concurrency
+#### Task 10: Idempotency + Concurrency ✅ DONE
 **Description:** Header `Idempotency-Key` ở checkout → cột unique; key trùng trả lại order cũ (không tạo mới). Đảm bảo reserve dùng lockForUpdate (verify không oversell khi available=1).
 **Acceptance (FR-C11):** AC-C11.1 (double checkout 1 order), AC-C11.2 (không oversell).
+> 3 tests. Pre-check key → trả order cũ; catch QueryException (race unique) → rollback + trả order cũ. No-oversell: available=1, checkout thứ 2 → 422 (reserve lock). 1 order, reserved=1.
 **Verify:** `php artisan test --filter=CheckoutIdempotencyTest`.
 **Dependencies:** T7
 **Files:** `CheckoutService`(idempotency), `CheckoutController`(đọc header), migration (nếu chưa có cột), test

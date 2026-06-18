@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Repositories\Contracts\CartRepositoryInterface;
 use App\Services\Order\InventoryReservationService;
 use App\Services\Order\OrderService;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 
@@ -26,6 +27,32 @@ class CheckoutService
      * @param  array{recipient_name: string, recipient_phone: string, shipping_address: string}  $shipping
      */
     public function checkout(Customer $customer, array $shipping, ?string $idempotencyKey = null): Order
+    {
+        // Idempotency: cùng key đã tạo order → trả lại order cũ (không tạo mới, không reserve).
+        if ($idempotencyKey !== null && ($existing = $this->findByKey($idempotencyKey)) !== null) {
+            return $existing;
+        }
+
+        try {
+            return $this->process($customer, $shipping, $idempotencyKey);
+        } catch (QueryException $e) {
+            // Race: 2 request cùng key → insert thứ 2 đụng unique → rollback; trả lại order đã tạo.
+            if ($idempotencyKey !== null && ($existing = $this->findByKey($idempotencyKey)) !== null) {
+                return $existing;
+            }
+            throw $e;
+        }
+    }
+
+    private function findByKey(string $idempotencyKey): ?Order
+    {
+        return Order::where('idempotency_key', $idempotencyKey)->first()?->load('items');
+    }
+
+    /**
+     * @param  array{recipient_name: string, recipient_phone: string, shipping_address: string}  $shipping
+     */
+    private function process(Customer $customer, array $shipping, ?string $idempotencyKey): Order
     {
         return DB::transaction(function () use ($customer, $shipping, $idempotencyKey) {
             $cart = $this->carts->activeCartFor($customer);
