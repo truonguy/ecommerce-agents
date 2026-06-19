@@ -2,6 +2,7 @@
 
 namespace App\Services\Payment;
 
+use App\Enums\OrderStatus;
 use App\Enums\PaymentMethod;
 use App\Enums\PaymentStatus;
 use App\Models\Order;
@@ -90,12 +91,28 @@ class PaymentService
                 ->first()
                 ?->update(['status' => $result['status']->value, 'raw_payload' => $payload]);
 
-            $this->applyStatus($payment, $result['status'] === PaymentStatus::SUCCESS ? 'success' : 'fail');
-
-            // T6 — Order Sync: SUCCESS → confirm order (gắn ở task sau).
+            if ($result['status'] === PaymentStatus::SUCCESS) {
+                $this->applyStatus($payment, 'success');
+                $this->confirmOrder($payment);
+            } else {
+                $this->applyStatus($payment, 'fail');
+                // FAILED/EXPIRED → order giữ PENDING (không đổi).
+            }
 
             return $payment->fresh();
         });
+    }
+
+    /**
+     * Payment SUCCESS → confirm order (PENDING→CONFIRMED). Idempotent: chỉ confirm khi order PENDING.
+     */
+    private function confirmOrder(Payment $payment): void
+    {
+        $order = $payment->order;
+
+        if ($order !== null && $order->status === OrderStatus::PENDING) {
+            $this->orders->transition($order, 'confirm');
+        }
     }
 
     private function applyStatus(Payment $payment, string $action): void

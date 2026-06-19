@@ -98,16 +98,17 @@ Thứ tự: **Foundation (T1–T2) → Gateway (T3) → Create (T4) → Webhook+
 **Files:** `Payment/WebhookController`, `Services/Payment/PaymentService`(handleWebhook), route (ngoài guard), test
 **Scope:** L → tách T5a (verify+update) / T5b (dedupe/idempotency) nếu cần.
 
-#### Task 6: Order Sync
+#### Task 6: Order Sync ✅ DONE
 **Description:** payment SUCCESS → `OrderService.transition(order,'confirm')` (idempotent nếu đã CONFIRMED); FAILED/EXPIRED → order giữ PENDING. Side-effect gắn trong handleWebhook/PaymentService.
 **Acceptance (FR-PM6):** AC-PM6.1–PM6.3.
+> 4 tests. `confirmOrder` chỉ confirm khi order PENDING (idempotent — webhook trùng/đã-confirmed an toàn). FAILED → order PENDING. Lưu ý: tránh đặt tên helper test `setup()` (đụng setUp).
 **Verify:** `php artisan test --filter=OrderSyncTest`.
 **Dependencies:** T5
 **Files:** `Services/Payment/PaymentService`(sync order), test
 **Scope:** M
 
-### ✅ Checkpoint: Webhook+Sync (T5–T6)
-- [ ] VNPay webhook → payment SUCCESS → order CONFIRMED; idempotent; chữ ký sai 400. Review.
+### ✅ Checkpoint: Webhook+Sync (T5–T6) — ĐẠT
+- [x] VNPay webhook → payment SUCCESS → order CONFIRMED; idempotent; chữ ký sai 400. Full suite 256 passed.
 
 ---
 
