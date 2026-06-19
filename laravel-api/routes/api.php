@@ -15,6 +15,7 @@ use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CatalogController;
 use App\Http\Controllers\Shop\CheckoutController;
 use App\Http\Controllers\Shop\OrderController;
+use App\Http\Controllers\Payment\WebhookController;
 use App\Http\Controllers\Shop\PaymentController;
 use App\Http\Controllers\Shop\Auth\LogoutController as ShopLogoutController;
 use App\Http\Controllers\Shop\Auth\PasswordController as ShopPasswordController;
@@ -33,6 +34,9 @@ use Illuminate\Support\Facades\Route;
 // Public catalog (Shop) — không cần token, chỉ PUBLISHED
 Route::get('/products', [CatalogController::class, 'index']);
 Route::get('/products/{slug}', [CatalogController::class, 'show']);
+
+// Payment webhook — public, verify chữ ký (không guard)
+Route::post('/payment/webhook', WebhookController::class);
 
 // Cart / Order (customer) — yêu cầu customer token
 Route::middleware('ensure_guard:customer')->group(function () {

@@ -62,9 +62,46 @@ class PaymentService
         });
     }
 
+    /**
+     * Xử lý webhook/callback gateway (source of truth). Verify chữ ký → dedupe (idempotent) →
+     * cập nhật payment + attempt. Chữ ký sai → 400; ref lạ → 404.
+     *
+     * @param  array<string, mixed>  $payload
+     */
+    public function handleWebhook(string $gateway, array $payload): Payment
+    {
+        $result = $this->gateways->for($gateway)->verify($payload);
+
+        abort_unless($result['valid'], 400, 'Invalid signature.');
+
+        $ref = $result['ref'];
+        $payment = $ref !== null ? $this->payments->findByProviderRef((string) $ref) : null;
+
+        abort_if($payment === null, 404, 'Unknown transaction.');
+
+        // Idempotent: payment đã ở trạng thái terminal → bỏ qua (dedupe webhook trùng).
+        if (in_array($payment->status, [PaymentStatus::SUCCESS, PaymentStatus::FAILED, PaymentStatus::EXPIRED], true)) {
+            return $payment;
+        }
+
+        return DB::transaction(function () use ($payment, $result, $payload, $ref) {
+            $payment->attempts()
+                ->where('provider_txn_ref', $ref)
+                ->first()
+                ?->update(['status' => $result['status']->value, 'raw_payload' => $payload]);
+
+            $this->applyStatus($payment, $result['status'] === PaymentStatus::SUCCESS ? 'success' : 'fail');
+
+            // T6 — Order Sync: SUCCESS → confirm order (gắn ở task sau).
+
+            return $payment->fresh();
+        });
+    }
+
     private function applyStatus(Payment $payment, string $action): void
     {
         $target = $this->stateMachine->target($payment->status, $action);
         $payment->update(['status' => $target->value]);
     }
 }
+

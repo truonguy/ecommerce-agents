@@ -89,9 +89,10 @@ Thứ tự: **Foundation (T1–T2) → Gateway (T3) → Create (T4) → Webhook+
 
 ### Phase 3 — Webhook + Order Sync
 
-#### Task 5: Webhook (verify + dedupe) · public `POST /api/payment/webhook`
+#### Task 5: Webhook (verify + dedupe) · public `POST /api/payment/webhook` ✅ DONE
 **Description:** verify chữ ký (adapter); dedupe theo provider_txn_ref (xử lý 1 lần); cập nhật payment + attempt theo kết quả. Chữ ký sai → 400.
 **Acceptance (FR-PM5):** AC-PM5.1–PM5.3 (idempotent, dedupe, signature).
+> 5 tests. `handleWebhook` verify→400 nếu sai; tìm payment theo ref→404 nếu lạ; terminal-status→idempotent return; success/fail cập nhật payment+attempt+raw_payload. Route public; controller loại `gateway` (query) khỏi payload verify. Order sync ở T6.
 **Verify:** `php artisan test --filter=WebhookTest`.
 **Dependencies:** T3, T4
 **Files:** `Payment/WebhookController`, `Services/Payment/PaymentService`(handleWebhook), route (ngoài guard), test
