@@ -32,6 +32,13 @@ class PaymentStateMachine
             'PENDING' => PaymentStatus::EXPIRED,
             'PROCESSING' => PaymentStatus::EXPIRED,
         ],
+        // retry: tạo attempt mới → đưa payment về PROCESSING (không retry khi đã SUCCESS).
+        'retry' => [
+            'PENDING' => PaymentStatus::PROCESSING,
+            'PROCESSING' => PaymentStatus::PROCESSING,
+            'FAILED' => PaymentStatus::PROCESSING,
+            'EXPIRED' => PaymentStatus::PROCESSING,
+        ],
     ];
 
     public function canApply(PaymentStatus $from, string $action): bool

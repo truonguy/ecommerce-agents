@@ -114,9 +114,10 @@ Thứ tự: **Foundation (T1–T2) → Gateway (T3) → Create (T4) → Webhook+
 
 ### Phase 4 — CRM + Reconciliation
 
-#### Task 7: CRM Payment Dashboard · `permission:manage_order`
+#### Task 7: CRM Payment Dashboard · `permission:manage_order` ✅ DONE
 **Description:** `GET /api/crm/payments` (filter status/method, paginate), `GET /api/crm/payments/{payment}` (kèm attempts), `POST /api/crm/payments/{payment}/retry` (attempt mới nếu chưa SUCCESS).
 **Acceptance (FR-PM7):** AC-PM7.1–PM7.3.
+> 7 tests. Thêm action `retry` vào PaymentStateMachine (→PROCESSING, trừ SUCCESS). `listAll` filter+paginate, `retry` (422 nếu SUCCESS). customer→401, thiếu manage_order→403.
 **Verify:** `php artisan test --filter=PaymentDashboardTest`.
 **Dependencies:** T4
 **Files:** `Crm/PaymentDashboardController`, `PaymentService`(retry/list), route, test

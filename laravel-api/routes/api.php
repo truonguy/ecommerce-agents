@@ -7,6 +7,7 @@ use App\Http\Controllers\Crm\CategoryController;
 use App\Http\Controllers\Crm\EmployeeController;
 use App\Http\Controllers\Crm\InventoryController;
 use App\Http\Controllers\Crm\OrderManagementController;
+use App\Http\Controllers\Crm\PaymentDashboardController;
 use App\Http\Controllers\Crm\ProductController;
 use App\Http\Controllers\Crm\ProductMediaController;
 use App\Http\Controllers\Crm\VariantController;
@@ -121,6 +122,10 @@ Route::prefix('crm')->group(function () {
             Route::get('/orders/{order}', [OrderManagementController::class, 'show']);
             Route::post('/orders/{order}/{action}', [OrderManagementController::class, 'apply'])
                 ->whereIn('action', ['confirm', 'pack', 'ship', 'complete', 'cancel']);
+
+            Route::get('/payments', [PaymentDashboardController::class, 'index']);
+            Route::get('/payments/{payment}', [PaymentDashboardController::class, 'show']);
+            Route::post('/payments/{payment}/retry', [PaymentDashboardController::class, 'retry']);
         });
 
         Route::middleware('permission:manage_customer')->get('/customers', fn () => ['data' => []]);

@@ -10,6 +10,8 @@ use App\Models\Payment;
 use App\Repositories\Contracts\PaymentRepositoryInterface;
 use App\Services\Order\OrderService;
 use App\Services\Payment\Gateways\GatewayManager;
+use App\Services\Support\PaginationService;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
 class PaymentService
@@ -19,7 +21,51 @@ class PaymentService
         private readonly GatewayManager $gateways,
         private readonly PaymentStateMachine $stateMachine,
         private readonly OrderService $orders,
+        private readonly PaginationService $pagination,
     ) {}
+
+    /**
+     * Danh sách payment (CRM), filter status/method tuỳ chọn.
+     */
+    public function listAll(mixed $perPage = null, ?string $status = null, ?string $method = null): LengthAwarePaginator
+    {
+        $query = Payment::query()->latest('id');
+
+        if ($status !== null && $status !== '') {
+            $query->where('status', $status);
+        }
+        if ($method !== null && $method !== '') {
+            $query->where('method', $method);
+        }
+
+        return $this->pagination->paginate($query, $perPage);
+    }
+
+    /**
+     * Retry payment chưa thành công: đưa về PROCESSING + tạo attempt mới qua gateway.
+     *
+     * @return array{payment: Payment, payment_url: string|null}
+     */
+    public function retry(Payment $payment): array
+    {
+        abort_if($payment->status === PaymentStatus::SUCCESS, 422, 'Payment already completed.');
+
+        return DB::transaction(function () use ($payment) {
+            $this->applyStatus($payment, 'retry'); // → PROCESSING
+
+            $result = $this->gateways->for($payment->method)->create($payment);
+
+            $payment->attempts()->create([
+                'provider_txn_ref' => $result['ref'],
+                'status' => PaymentStatus::PROCESSING->value,
+            ]);
+
+            return [
+                'payment' => $payment->load('attempts'),
+                'payment_url' => $result['url'],
+            ];
+        });
+    }
 
     /**
      * Tạo payment cho order (PENDING). COD → SUCCESS + confirm order ngay; VNPAY → PROCESSING + payment_url.
